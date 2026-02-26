@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_card_bg"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_margin="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Transaction"
+        android:textColor="#1C1C1E"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rgType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbSpent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Spent"
+            android:textColor="#1C1C1E"
+            android:buttonTint="#FF3B30"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/rbReceived"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Received"
+            android:textColor="#1C1C1E"
+            android:buttonTint="#34C759" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/etAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/liquid_glass_card"
+        android:hint="Amount"
+        android:inputType="numberDecimal"
+        android:padding="12dp"
+        android:textColor="#1C1C1E"
+        android:textColorHint="#8E8E93" />
+
+    <EditText
+        android:id="@+id/etCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/liquid_glass_card"
+        android:hint="Category (Parents, Food, etc.)"
+        android:padding="12dp"
+        android:textColor="#1C1C1E"
+        android:textColorHint="#8E8E93" />
+
+    <RadioGroup
+        android:id="@+id/rgAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbAir"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Air Cash"
+            android:textColor="#1C1C1E"
+            android:buttonTint="#007AFF"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/rbSolid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Solid Cash"
+            android:textColor="#1C1C1E"
+            android:buttonTint="#007AFF" />
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/cbIsLending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Lending to Friend"
+        android:textColor="#1C1C1E"
+        android:buttonTint="#1C1C1E" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/liquid_glass_button"
+        android:text="Save Transaction"
+        android:textAllCaps="false"
+        android:textColor="#007AFF" />
+
+</LinearLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Rupee Symbol with a premium dark blue/teal finish -->
+    <!-- Centered in the 108x108 viewport -->
+    <path
+        android:fillColor="#102A43"
+        android:pathData="M36,32h36v4.5h-36z M36,41h36v4.5h-11.25c0,0 11.25,2.25 11.25,16.875c0,16.875 -16.875,20.25 -24.75,20.25l24.75,28.125h-7.875l-25.875,-29.25v-4.5h16.875c7.875,0 16.875,-2.25 16.875,-14.625c0,-10.125 -9,-11.25 -16.875,-11.25h-19.125z" />
+
+    <!-- Subtle Inner Highlight to give it some depth -->
+    <path
+        android:fillColor="#33FFFFFF"
+        android:pathData="M36,32h36v1.5h-36z M36,41h36v1.5h-36z" />
+
+</vector>

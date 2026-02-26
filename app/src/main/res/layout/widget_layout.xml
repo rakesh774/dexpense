@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/liquid_glass_card"
+    android:padding="16dp">
+
+    <!-- Subtle blur effect on the widget can't be done directly in XML
+         but increasing transparency (#99FFFFFF) mimics the glass effect -->
+
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Balance"
+        android:textColor="#801C1C1E"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/widget_total_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/widget_title"
+        android:layout_marginTop="4dp"
+        android:text="₹0"
+        android:textColor="#1C1C1E"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/widget_refresh"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/stat_notify_sync"
+        android:contentDescription="Refresh"
+        android:tint="#007AFF" />
+
+</RelativeLayout>
