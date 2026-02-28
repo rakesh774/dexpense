@@ -5,21 +5,22 @@
     android:background="@drawable/white_card_bg"
     android:orientation="vertical"
     android:padding="24dp"
-    android:layout_margin="16dp">
+    android:layout_margin="20dp"
+    android:minWidth="350dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Transaction"
         android:textColor="#1C1C1E"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <RadioGroup
         android:id="@+id/rgType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <RadioButton
@@ -46,11 +47,11 @@
         android:id="@+id/etAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/liquid_glass_card"
         android:hint="Amount"
         android:inputType="numberDecimal"
-        android:padding="12dp"
+        android:padding="16dp"
         android:textColor="#1C1C1E"
         android:textColorHint="#8E8E93" />
 
@@ -60,8 +61,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/liquid_glass_card"
-        android:hint="Category (Parents, Food, etc.)"
-        android:padding="12dp"
+        android:hint="Category (Food, Rent, etc.)"
+        android:padding="16dp"
         android:textColor="#1C1C1E"
         android:textColorHint="#8E8E93" />
 
@@ -69,7 +70,7 @@
         android:id="@+id/rgAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <RadioButton
@@ -96,19 +97,21 @@
         android:id="@+id/cbIsLending"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="Lending to Friend"
         android:textColor="#1C1C1E"
         android:buttonTint="#1C1C1E" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/liquid_glass_button"
         android:text="Save Transaction"
         android:textAllCaps="false"
-        android:textColor="#007AFF" />
+        android:textColor="#007AFF"
+        android:textStyle="bold"
+        android:textSize="18sp" />
 
 </LinearLayout>
