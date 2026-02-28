@@ -3,10 +3,7 @@ package com.example.dexpenses;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
-import android.graphics.RenderEffect;
-import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.MotionEvent;
@@ -14,10 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -47,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         View mainLayout = findViewById(R.id.main);
-        // applyBlurEffect(mainLayout); // REMOVED: This was blurring the whole app content
 
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -64,12 +58,15 @@ public class MainActivity extends AppCompatActivity {
         CardView cvAir = findViewById(R.id.cvAir);
         CardView cvSolid = findViewById(R.id.cvSolid);
         CardView cvEMI = findViewById(R.id.cvEMISection);
+        CardView cvSafe = findViewById(R.id.cvSafeToSpend);
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         TextView btnManageEMI = findViewById(R.id.btnManageEMI);
+        TextView btnTransfer = findViewById(R.id.btnTransfer);
 
         setupLiquidInteraction(cvAir);
         setupLiquidInteraction(cvSolid);
         setupLiquidInteraction(cvEMI);
+        setupLiquidInteraction(cvSafe);
         setupLiquidInteraction(fabAdd);
 
         RecyclerView rvTransactions = findViewById(R.id.rvTransactions);
@@ -85,15 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
         fabAdd.setOnClickListener(v -> showAddExpenseDialog());
         btnManageEMI.setOnClickListener(v -> showAddEMIDialog());
-    }
-
-    private void applyBlurEffect(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            view.setRenderEffect(RenderEffect.createBlurEffect(40f, 40f, Shader.TileMode.CLAMP));
-        }
+        btnTransfer.setOnClickListener(v -> showTransferDialog());
     }
 
     private void setupLiquidInteraction(View view) {
+        if (view == null) return;
         view.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -139,10 +132,12 @@ public class MainActivity extends AppCompatActivity {
     private void updateManualBalance(String type, double newAmount) {
         executorService.execute(() -> {
             Balance b = db.balanceDao().getBalance();
-            if (type.equals("Air")) b.setInitialAir(newAmount);
-            else b.setInitialSolid(newAmount);
-            db.balanceDao().update(b);
-            runOnUiThread(this::updateUI);
+            if (b != null) {
+                if (type.equals("Air")) b.setInitialAir(newAmount);
+                else b.setInitialSolid(newAmount);
+                db.balanceDao().update(b);
+                runOnUiThread(this::updateUI);
+            }
         });
     }
 
@@ -151,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_add_expense);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            // applyBlurEffect(dialog.getWindow().getDecorView()); // REMOVED: This blurs the dialog content itself
         }
 
         EditText etAmount = dialog.findViewById(R.id.etAmount);
@@ -201,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            // applyBlurEffect(dialog.getWindow().getDecorView()); // REMOVED
         }
 
         btnSave.setOnClickListener(v -> {
@@ -222,32 +215,102 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void showTransferDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_transfer);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        EditText etAmount = dialog.findViewById(R.id.etTransferAmount);
+        RadioGroup rgFrom = dialog.findViewById(R.id.rgTransferFrom);
+        TextView tvTo = dialog.findViewById(R.id.tvTransferTo);
+        Button btnConfirm = dialog.findViewById(R.id.btnConfirmTransfer);
+
+        rgFrom.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rbFromAir) {
+                tvTo.setText("Solid Cash");
+            } else {
+                tvTo.setText("Air Cash");
+            }
+        });
+
+        btnConfirm.setOnClickListener(v -> {
+            String amountStr = etAmount.getText().toString();
+            if (amountStr.isEmpty()) return;
+
+            double amount = Double.parseDouble(amountStr);
+            boolean fromAir = rgFrom.getCheckedRadioButtonId() == R.id.rbFromAir;
+
+            executorService.execute(() -> {
+                long now = System.currentTimeMillis();
+                String category = fromAir ? "Interchanged - Air to Solid" : "Interchanged - Solid to Air";
+                // We mark it as 'Transfer' type to handle UI color and single entry logic
+                db.transactionDao().insert(new Transaction(amount, category, fromAir ? "Air" : "Solid", "Transfer", false, now));
+                
+                // IMPORTANT: We still need to create the counter-entry for balance calculation, 
+                // but we'll mark it so the Adapter can ignore it or we'll filter it in the UI.
+                // Alternatively, we can use a special transactionType 'TransferHidden'
+                db.transactionDao().insert(new Transaction(amount, "Internal Transfer", fromAir ? "Solid" : "Air", "TransferHidden", false, now + 1));
+                
+                runOnUiThread(() -> {
+                    updateUI();
+                    dialog.dismiss();
+                });
+            });
+        });
+        dialog.show();
+    }
+
     private void updateUI() {
         executorService.execute(() -> {
             Balance b = db.balanceDao().getBalance();
             if (b == null) return;
 
             double totalEMI = db.emiDao().getTotalEMIAmount();
+            
+            // Re-calculating balance including transfers
             double airSpent = db.transactionDao().getAirCashSpent();
             double airReceived = db.transactionDao().getAirCashReceived();
             double solidSpent = db.transactionDao().getSolidCashSpent();
             double solidReceived = db.transactionDao().getSolidCashReceived();
+
+            // We need to account for 'Transfer' and 'TransferHidden' types in the balance
+            // Transfer (Source) acts like 'Spent', TransferHidden (Dest) acts like 'Received'
             
             List<Transaction> allTransactions = db.transactionDao().getAllTransactions();
+            List<Transaction> displayTransactions = new ArrayList<>();
+            
+            double extraAirIn = 0, extraAirOut = 0, extraSolidIn = 0, extraSolidOut = 0;
+            
+            for (Transaction t : allTransactions) {
+                if (!t.getTransactionType().equals("TransferHidden")) {
+                    displayTransactions.add(t);
+                }
+                
+                // Balance calculations for transfers
+                if (t.getTransactionType().equals("Transfer")) {
+                    if (t.getAccountType().equals("Air")) extraAirOut += t.getAmount();
+                    else extraSolidOut += t.getAmount();
+                } else if (t.getTransactionType().equals("TransferHidden")) {
+                    if (t.getAccountType().equals("Air")) extraAirIn += t.getAmount();
+                    else extraSolidIn += t.getAmount();
+                }
+            }
 
-            double currentAir = b.getInitialAir() - airSpent + airReceived;
-            double currentSolid = b.getInitialSolid() - solidSpent + solidReceived;
+            double currentAir = b.getInitialAir() - airSpent + airReceived - extraAirOut + extraAirIn;
+            double currentSolid = b.getInitialSolid() - solidSpent + solidReceived - extraSolidOut + extraSolidIn;
             double safeBalance = currentAir - totalEMI;
 
             runOnUiThread(() -> {
                 tvAirCash.setText("₹" + String.format("%.0f", currentAir));
                 tvSolidCash.setText("₹" + String.format("%.0f", currentSolid));
                 tvEMITotal.setText("Total: ₹" + String.format("%.0f", totalEMI));
-                tvSafeBalance.setText("Safe to Spend: ₹" + String.format("%.0f", safeBalance));
-                adapter.setTransactions(allTransactions);
+                tvSafeBalance.setText("₹" + String.format("%.2f", safeBalance));
+                adapter.setTransactions(displayTransactions);
                 
                 if (safeBalance < 0) {
-                    tvSafeBalance.setTextColor(Color.RED);
+                    tvSafeBalance.setTextColor(Color.parseColor("#FF3B30"));
                 } else {
                     tvSafeBalance.setTextColor(Color.parseColor("#007AFF"));
                 }

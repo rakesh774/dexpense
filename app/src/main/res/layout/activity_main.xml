@@ -18,22 +18,81 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvHeader"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Dashboard"
-                android:textColor="#1C1C1E"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="32dp">
+
+                <TextView
+                    android:id="@+id/tvHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dashboard"
+                    android:textColor="#1C1C1E"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnTransfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/liquid_glass_button"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+                    android:text="Transfer"
+                    android:textColor="#007AFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <!-- Safe to Spend Card (Visual Hierarchy Highlight) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvSafeToSpend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="12dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/liquid_glass_card"
+                    android:orientation="vertical"
+                    android:padding="28dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SAFE TO SPEND"
+                        android:textColor="#1C1C1E"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:letterSpacing="0.1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSafeBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="₹0"
+                        android:textColor="#007AFF"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <!-- Dashboard Cards Container -->
             <LinearLayout
                 android:id="@+id/llCards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <!-- Air Cash Card -->
@@ -44,12 +103,12 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="32dp"
-                    app:cardElevation="10dp"
+                    app:cardElevation="8dp"
                     app:cardBackgroundColor="#FFFFFF">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="140dp"
+                        android:layout_height="120dp"
                         android:background="@drawable/liquid_glass_card"
                         android:padding="20dp">
 
@@ -69,17 +128,7 @@
                             android:layout_marginTop="8dp"
                             android:text="₹0"
                             android:textColor="#1C1C1E"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvSafeBalance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:text="Safe to Spend: ₹0"
-                            android:textColor="#007AFF"
-                            android:textSize="11sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
@@ -92,12 +141,12 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="32dp"
-                    app:cardElevation="10dp"
+                    app:cardElevation="8dp"
                     app:cardBackgroundColor="#FFFFFF">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="140dp"
+                        android:layout_height="120dp"
                         android:background="@drawable/liquid_glass_card"
                         android:padding="20dp">
 
@@ -117,7 +166,7 @@
                             android:layout_marginTop="8dp"
                             android:text="₹0"
                             android:textColor="#1C1C1E"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
@@ -128,9 +177,9 @@
                 android:id="@+id/cvEMISection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 app:cardCornerRadius="32dp"
-                app:cardElevation="10dp"
+                app:cardElevation="8dp"
                 app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout

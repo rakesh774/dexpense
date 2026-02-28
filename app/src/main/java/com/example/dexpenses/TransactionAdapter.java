@@ -42,7 +42,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, hh:mm a", Locale.getDefault());
         holder.tvDate.setText(sdf.format(new Date(transaction.getTimestamp())));
 
-        if (transaction.getTransactionType().equals("Spent")) {
+        if (transaction.getTransactionType().equals("Transfer")) {
+            // New Violet color for interchanged transactions
+            holder.tvAmount.setText("⇄ ₹" + String.format("%.0f", transaction.getAmount()));
+            holder.tvAmount.setTextColor(Color.parseColor("#AF52DE")); // Apple System Purple/Violet
+        } else if (transaction.getTransactionType().equals("Spent")) {
             holder.tvAmount.setText("- ₹" + String.format("%.0f", transaction.getAmount()));
             holder.tvAmount.setTextColor(Color.parseColor("#FF3B30")); // Apple Red
         } else {
