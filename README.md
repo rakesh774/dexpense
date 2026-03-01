@@ -6,6 +6,8 @@
 
 Unlike traditional apps that only show your current balance, DEXPENSES introduces the **"Safe to Spend"** philosophy. By automatically calculating your liquid "Air Cash" against your monthly EMI obligations, it tells you exactly how much money you can actually spend without compromising your future commitments. Whether you are moving money between cash and savings or tracking a loan to a friend, DEXPENSES simplifies complex financial workflows into a single, beautiful dashboard.
 
+<img src="https://github.com/rakesh774/dexpense/blob/20ec74206e6117d09220fe750cac23e1ed10c792/app/src/Screenshot_20260301_185630.jpg" width="200"/> <img src="https://github.com/rakesh774/dexpense/blob/20ec74206e6117d09220fe750cac23e1ed10c792/app/src/Screenshot_20260301_185634.jpg" width="200"/> <img src="https://github.com/rakesh774/dexpense/blob/20ec74206e6117d09220fe750cac23e1ed10c792/app/src/Screenshot_20260301_185640.jpg" width="200"/> <img src="https://github.com/rakesh774/dexpense/blob/20ec74206e6117d09220fe750cac23e1ed10c792/app/src/Screenshot_20260301_185644.jpg" width="200"/>
+
 ---
 
 ## 📥 Download
