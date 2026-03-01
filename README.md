@@ -2,6 +2,15 @@
 
 **DEXPENSES** is a premium personal finance manager for Android that focuses on financial clarity and modern aesthetics. It moves beyond simple expense tracking by introducing the concept of **"Safe to Spend"**—helping you understand exactly how much liquidity you have after accounting for your monthly obligations.
 
+**DEXPENSES** is designed for the modern user who values both functionality and high-end design. Built with a stunning **Glassmorphism UI**, the app provides a "Liquid Glass" experience that makes managing money feel effortless and visually rewarding. 
+
+Unlike traditional apps that only show your current balance, DEXPENSES introduces the **"Safe to Spend"** philosophy. By automatically calculating your liquid "Air Cash" against your monthly EMI obligations, it tells you exactly how much money you can actually spend without compromising your future commitments. Whether you are moving money between cash and savings or tracking a loan to a friend, DEXPENSES simplifies complex financial workflows into a single, beautiful dashboard.
+
+---
+
+## 📥 Download
+[**Click here to download the latest APK**](https://github.com/rakesh774/DEXPENSE/releases/latest)
+
 ---
 
 ## ✨ Key Features
