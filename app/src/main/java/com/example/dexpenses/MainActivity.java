@@ -13,7 +13,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements EMIAdapter.OnEMIC
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        input.setHint("Enter new balance");
+        input.setHint("Enter current " + type + " cash");
         builder.setView(input);
 
         builder.setPositiveButton("Update", (dialog, which) -> {
@@ -136,12 +135,36 @@ public class MainActivity extends AppCompatActivity implements EMIAdapter.OnEMIC
         builder.show();
     }
 
-    private void updateManualBalance(String type, double newAmount) {
+    private void updateManualBalance(String type, double targetAmount) {
         executorService.execute(() -> {
             Balance b = db.balanceDao().getBalance();
             if (b != null) {
-                if (type.equals("Air")) b.setInitialAir(newAmount);
-                else b.setInitialSolid(newAmount);
+                // To fix the "glitch", we need to set the initial balance such that:
+                // targetAmount = initialBalance - totalSpent + totalReceived
+                // Therefore: initialBalance = targetAmount + totalSpent - totalReceived
+                
+                List<Transaction> allTransactions = db.transactionDao().getAllTransactions();
+                double totalOut = 0;
+                double totalIn = 0;
+
+                for (Transaction t : allTransactions) {
+                    if (t.getAccountType().equals(type)) {
+                        if (t.getTransactionType().equals("Spent") || t.getTransactionType().equals("Transfer")) {
+                            totalOut += t.getAmount();
+                        } else if (t.getTransactionType().equals("Received") || t.getTransactionType().equals("TransferHidden")) {
+                            totalIn += t.getAmount();
+                        }
+                    }
+                }
+
+                double correctedInitial = targetAmount + totalOut - totalIn;
+
+                if (type.equals("Air")) {
+                    b.setInitialAir(correctedInitial);
+                } else {
+                    b.setInitialSolid(correctedInitial);
+                }
+
                 db.balanceDao().update(b);
                 runOnUiThread(this::updateUI);
             }
